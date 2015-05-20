@@ -17,6 +17,7 @@
 import os
 import sys
 from optparse import make_option
+from django import get_version
 from django.conf import settings
 from django.core.management import call_command
 from django.core.management.base import BaseCommand
@@ -35,12 +36,16 @@ class Command(BaseCommand):
     help = u'Run lettuce tests all along installed apps'
     args = '[PATH to feature file or folder]'
     requires_model_validation = False
+    option_list = BaseCommand.option_list[1:]
 
-    option_list = BaseCommand.option_list[1:] + (
-        make_option('-v', '--verbosity', action='store', dest='verbosity', default='4',
-            type='choice', choices=map(str, range(5)),
-            help='Verbosity level; 0=no output, 1=only dots, 2=only scenario names, 3=colorless output, 4=normal output (colorful)'),
+    if get_version() < '1.8':
+        option_list += (
+            make_option('-v', '--verbosity', action='store', dest='verbosity', default='4',
+                type='choice', choices=map(str, range(5)),
+                help='Verbosity level; 0=no output, 1=only dots, 2=only scenario names, 3=colorless output, 4=normal output (colorful)'),
+        )
 
+    option_list += (
         make_option('-a', '--apps', action='store', dest='apps', default='',
             help='Run ONLY the django apps that are listed here. Comma separated'),
 
