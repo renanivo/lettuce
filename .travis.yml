@@ -1,6 +1,10 @@
 language: python
 sudo: false
 
+cache:
+  directories:
+    - $HOME/.cache/pip
+
 env:
     - TOX_ENV=py26-django15
     - TOX_ENV=py26-django16
