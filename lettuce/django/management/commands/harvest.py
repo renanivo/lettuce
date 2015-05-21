@@ -130,6 +130,11 @@ class Command(BaseCommand):
         setup_test_environment()
 
         verbosity = int(options.get('verbosity', 4))
+
+        if get_version() >= '1.8' and verbosity == 1:
+            no_color = options.get('no-color')
+            verbosity = verbosity if no_color else 4
+
         apps_to_run = tuple(options.get('apps', '').split(","))
         apps_to_avoid = tuple(options.get('avoid_apps', '').split(","))
         run_server = not options.get('no_server', False)
